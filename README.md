@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌐 Win11 Net Automator v3.0
+# 🌐 Win11 Net Automator v3.1
 
 **The Ultimate Networking Automation Suite for Windows 11.**
 
@@ -14,7 +14,7 @@
 
 I got tired of manually configuring DNS, flushing network stacks, and clicking through settings every time I set up a new machine or debug connectivity issues. So I wrote these scripts to automate the boring stuff.
 
-**Version 3.0 is here!** We have entirely replaced the old text-based command-line menu with a gorgeous, native Windows **Graphical User Interface (GUI)**. 
+**Version 3.1 is here!** We have upgraded the tool into a fully interactive **Terminal User Interface (TUI)** with ASCII art and arrow-key navigation!
 
 ## 🚀 How to Install & Use
 
@@ -28,13 +28,19 @@ cd win11-net-automator
    - **Desktop Context Menu:** Right-click anywhere on your desktop and select `🌐 Win11 Net Automator` to open the GUI.
    - **Terminal:** Open Command Prompt or PowerShell anywhere and simply type `menu` to launch the GUI.
 
-*(When you click a button in the GUI, it will automatically prompt you for Administrator privileges via UAC).*
+*(When you launch the TUI or select a tool, it will automatically prompt you for Administrator privileges via UAC if needed).*
+
+> [!CAUTION]
+> **Disclaimer & Backup Warning:** 
+> Some tools in the **Performance & Fixing** and **Privacy & Routing** sections (such as Gaming Mode, Speed Tuner, and Telemetry Blocker) make direct modifications to your Windows Registry, Firewall, and System Services. 
+> 
+> **It is highly recommended to create a System Restore Point or backup your current network/registry settings before running these optimizations.** While these scripts are designed to be safe and reversible, modifying system networking can sometimes result in unexpected behavior depending on your specific hardware and Windows configuration.
 
 ## What's in the box
 
 | Tool | What it does |
 |--------|-------------|
-| `net-automator-gui.ps1` | **[NEW]** The native Dark Mode GUI dashboard. Features categorized buttons, hover effects, and automatic UAC elevation. |
+| `terminal-menu.ps1` | **[NEW]** The interactive Terminal UI (TUI) menu. Navigate with Arrow Keys and hit Enter to run. Auto-elevates. |
 | `gaming-mode.bat` | Pauses bandwidth-heavy background tasks (Updates, OneDrive) and optimizes TCP/Registry for the absolute lowest gaming ping. |
 | `speed-tuner.bat` | Tunes your Windows TCP/IP stack (Auto-Tuning, RSS, ECN) to max out high-speed fiber or Wi-Fi 6 connections. |
 | `auto-healer.bat` | A background monitor that constantly checks your internet connection and automatically resets your adapter if the connection drops. |
@@ -51,6 +57,12 @@ cd win11-net-automator
 | `lltk-profile-sync.bat` | Quick switcher for Lenovo Legion Toolkit power profiles (Quiet/Balance/Performance). |
 
 ## Changelog
+
+### v3.1.0 (The Terminal Menu Update)
+- **Interactive TUI:** Replaced the WinForms GUI with a beautifully designed, keyboard-interactive Terminal User Interface (`terminal-menu.ps1`).
+- **Arrow-Key Navigation:** No more typing numbers. Use the Up/Down arrow keys to navigate the menu and hit Enter to execute.
+- **ASCII Art & Colors:** Features a custom ASCII header and categorized color coding.
+- **Robust Execution:** Uses native PowerShell and CMD bridging to run batch scripts flawlessly without encoding corruption.
 
 ### v3.0.0 (The GUI Update)
 - **New Interface:** Replaced the text-based command prompt menu with a sleek, native PowerShell Graphical User Interface (`net-automator-gui.ps1`).
