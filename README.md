@@ -14,7 +14,7 @@
 
 I got tired of manually configuring DNS, flushing network stacks, and clicking through settings every time I set up a new machine or debug connectivity issues. So I wrote these scripts to automate the boring stuff.
 
-This repo is a collection of `.bat` scripts (with PowerShell under the hood where needed) that handle DNS over HTTPS setup, AdGuard Home routing, Lenovo Legion power profiles, and full network resets.
+This repo is a collection of `.bat` scripts (with PowerShell under the hood where needed) that handle DNS configuration, privacy hardening, network diagnostics, and system optimization.
 
 ## What's in the box
 
@@ -22,13 +22,16 @@ This repo is a collection of `.bat` scripts (with PowerShell under the hood wher
 |--------|-------------|
 | `enable-doh.bat` | Sets up DNS over HTTPS with Cloudflare + Google DNS. Registers DoH templates, configures the adapter, writes registry flags — the whole nine yards. |
 | `adguard-routing.bat` | Points your DNS to a local AdGuard Home instance. Detects your active adapter automatically. |
-| `lltk-profile-sync.bat` | Quick switcher for Lenovo Legion Toolkit power profiles (Quiet/Balance/Performance). Saves you from opening the GUI. |
+| `dns-benchmark.bat` | Tests 8 popular DNS servers for response time, shows you the fastest, and offers to apply it. |
 | `network-flush.bat` | Nuclear option — flushes DNS, releases/renews IP, resets Winsock and TCP/IP stack. For when nothing else works. |
+| `telemetry-block.bat` | Blocks Windows 11 telemetry endpoints via firewall + hosts file. Disables tracking services. Fully reversible. |
+| `wifi-passwords.bat` | Lists all saved Wi-Fi profiles and their passwords in one shot. |
+| `lltk-profile-sync.bat` | Quick switcher for Lenovo Legion Toolkit power profiles (Quiet/Balance/Performance). |
 
 ## Before you start
 
 - **Windows 11** — these scripts use Win11-specific features (especially the DoH stuff)
-- **Run as Admin** — every script checks for elevation and will bail out if you forget
+- **Run as Admin** — most scripts need elevation and will tell you if you forget
 - **Lenovo Legion Toolkit** — only needed for `lltk-profile-sync.bat`. Make sure `LenovoToolkitCLI.exe` is in your PATH
 
 ## How to use
@@ -42,9 +45,10 @@ Then right-click any script in `scripts/` → **Run as administrator**. Or from 
 
 ```batch
 scripts\enable-doh.bat
-scripts\adguard-routing.bat
+scripts\dns-benchmark.bat
+scripts\telemetry-block.bat
+scripts\wifi-passwords.bat
 scripts\network-flush.bat
-scripts\lltk-profile-sync.bat
 ```
 
 Each script has interactive prompts and will walk you through what it's doing.
@@ -60,17 +64,45 @@ Enables encrypted DNS on your active network adapter. It:
 - Writes the `DohFlags` registry entries so Windows enforces encrypted-only mode
 - Falls back to `netsh` if the PowerShell cmdlet doesn't cooperate
 
+### `dns-benchmark.bat`
+
+Not sure which DNS server is fastest for your location? This script benchmarks 8 servers (Cloudflare, Google, Quad9, OpenDNS, AdGuard, CleanBrowsing) by actually resolving real domains — not just pinging. It averages 3 queries per server, ranks them, and lets you apply the fastest one with a single keystroke.
+
+### `telemetry-block.bat`
+
+Three modes:
+- **Block** — adds outbound firewall rules for 18 known telemetry endpoints, writes them to the hosts file, disables DiagTrack and dmwappushservice, sets `AllowTelemetry` to 0 in registry
+- **Unblock** — reverses everything cleanly
+- **Status** — shows which endpoints are currently blocked and service states
+
+Everything is tagged with a `Win11NetAutomator-Telemetry` prefix so it won't interfere with other firewall rules.
+
+### `wifi-passwords.bat`
+
+Pulls every saved Wi-Fi profile from `netsh wlan` and extracts the stored password for each one. Handy when you need to share a Wi-Fi password but can't remember it, or when you're migrating to a new machine. Works without admin but some profiles might hide keys without elevation.
+
 ### `adguard-routing.bat`
 
 If you're running AdGuard Home on your LAN, this script points your machine's DNS at it. It auto-detects whether you're on Wi-Fi or Ethernet, asks for the AdGuard IP, validates the input, and applies it. DNS cache gets flushed automatically after.
+
+### `network-flush.bat`
+
+Runs the classic network reset sequence (`flushdns` → `release` → `renew` → `winsock reset` → `ip reset`) with proper error tracking. Offers to reboot when it's done since Winsock/TCP resets need a restart to fully apply.
 
 ### `lltk-profile-sync.bat`
 
 Simple menu to switch power profiles through the Lenovo Legion Toolkit CLI. Pick 1/2/3 and it calls `LenovoToolkitCLI.exe` with the right arguments. Not much more to it.
 
-### `network-flush.bat`
+## Changelog
 
-Runs the classic network reset sequence (`flushdns` → `release` → `renew` → `winsock reset` → `ip reset`) with proper error tracking. Offers to reboot when it's done since Winsock/TCP resets need a restart to fully apply.
+### v1.1.0
+- **New:** `dns-benchmark.bat` — benchmark DNS servers and auto-apply the fastest
+- **New:** `telemetry-block.bat` — block/unblock Windows 11 telemetry (firewall + hosts + services + registry)
+- **New:** `wifi-passwords.bat` — view all saved Wi-Fi passwords at once
+- Reorganized README for better readability
+
+### v1.0.0
+- Initial release with `enable-doh.bat`, `adguard-routing.bat`, `network-flush.bat`, `lltk-profile-sync.bat`
 
 ## Contributing
 
