@@ -108,7 +108,7 @@ echo.
 echo  Configuring DNS on "!ADAPTER!"...
 
 powershell -NoProfile -Command ^
-    "Set-DnsClientServerAddress -InterfaceAlias '!ADAPTER!' -ServerAddresses ('1.1.1.1','1.0.0.1','8.8.8.8','8.8.4.4')" 2>nul
+    "Set-DnsClientServerAddress -InterfaceAlias '!ADAPTER!' -ServerAddresses ('1.1.1.1','1.0.0.1','8.8.8.8','8.8.4.4'); if (-not $?) { exit 1 }" 2>nul
 
 if %errorlevel% neq 0 (
     echo  PowerShell failed, trying netsh...

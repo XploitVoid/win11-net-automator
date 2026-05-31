@@ -39,7 +39,7 @@ set "FAILS=0"
 echo  [1/5] Flushing DNS cache...
 ipconfig /flushdns
 if %errorlevel% neq 0 (
-    echo   ^ Warning: something went wrong
+    echo    Warning: something went wrong
     set /a FAILS+=1
 ) else (
     echo   OK
@@ -50,7 +50,7 @@ echo.
 echo  [2/5] Releasing IP address...
 ipconfig /release
 if %errorlevel% neq 0 (
-    echo   ^ Warning: release failed (might be fine on static IP)
+    echo    Warning: release failed (might be fine on static IP)
     set /a FAILS+=1
 ) else (
     echo   OK
@@ -59,9 +59,10 @@ echo.
 
 :: -- 3. Renew IP --
 echo  [3/5] Renewing IP address...
+echo   (This might take up to 30 seconds if your DHCP is slow)
 ipconfig /renew
 if %errorlevel% neq 0 (
-    echo   ^ Warning: renew failed
+    echo    Warning: renew failed
     set /a FAILS+=1
 ) else (
     echo   OK
@@ -74,7 +75,7 @@ echo.
 echo  [4/5] Resetting Winsock...
 netsh winsock reset
 if %errorlevel% neq 0 (
-    echo   ^ Warning: winsock reset had issues
+    echo    Warning: winsock reset had issues
     set /a FAILS+=1
 ) else (
     echo   OK
@@ -87,7 +88,7 @@ echo.
 echo  [5/5] Resetting TCP/IP stack...
 netsh int ip reset
 if %errorlevel% neq 0 (
-    echo   ^ Warning: TCP/IP reset had issues
+    echo    Warning: TCP/IP reset had issues
     set /a FAILS+=1
 ) else (
     echo   OK

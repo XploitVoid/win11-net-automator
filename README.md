@@ -95,6 +95,9 @@ Simple menu to switch power profiles through the Lenovo Legion Toolkit CLI. Pick
 
 ## Changelog
 
+### v1.1.1
+- **Fix:** Fixed 11 bugs across all scripts, including telemetry blocker logic, DNS benchmark variables, Wi-Fi password extraction for SSIDs with colons, and minor UX improvements.
+
 ### v1.1.0
 - **New:** `dns-benchmark.bat` — benchmark DNS servers and auto-apply the fastest
 - **New:** `telemetry-block.bat` — block/unblock Windows 11 telemetry (firewall + hosts + services + registry)

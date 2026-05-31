@@ -21,12 +21,7 @@ echo.
 echo  -----------------------------------------------------------
 echo.
 
-:: We'll test against these domains — mix of popular sites
-set "TEST_DOMAINS=github.com cloudflare.com google.com"
-set "ROUNDS=3"
-
-:: Define DNS servers to test
-:: Format: Name|IP
+:: Define DNS servers to test — Name|IP
 set "DNS[0]=Cloudflare|1.1.1.1"
 set "DNS[1]=Cloudflare 2|1.0.0.1"
 set "DNS[2]=Google|8.8.8.8"
@@ -35,26 +30,24 @@ set "DNS[4]=Quad9|9.9.9.9"
 set "DNS[5]=OpenDNS|208.67.222.222"
 set "DNS[6]=AdGuard|94.140.14.14"
 set "DNS[7]=CleanBrowsing|185.228.168.9"
-set "DNS_COUNT=8"
 
-:: Store results for sorting later
 set "RESULT_IDX=0"
 
 for /L %%I in (0,1,7) do (
-    :: Parse name and IP
+    :: Parse name and IP from "Name|IP" format
     for /f "tokens=1,2 delims=|" %%N in ("!DNS[%%I]!") do (
         set "SNAME=%%N"
         set "SIP=%%O"
     )
 
-    :: Run benchmark via PowerShell
-    :: We query multiple domains and average the results for accuracy
+    :: Benchmark: resolve 3 domains and average the latency
+    set "AVG=err"
     for /f "usebackq" %%R in (`powershell -NoProfile -Command ^
         "$domains = @('github.com','cloudflare.com','google.com'); $times = @(); foreach($d in $domains) { $ms = (Measure-Command { try { Resolve-DnsName $d -Server '!SIP!' -DnsOnly -ErrorAction SilentlyContinue } catch {} }).TotalMilliseconds; $times += $ms }; [math]::Round(($times ^| Measure-Object -Average).Average, 1)"`) do (
         set "AVG=%%R"
     )
 
-    :: Pad the name for alignment
+    :: Pad name for alignment
     set "DISPLAY=!SNAME!                    "
     set "DISPLAY=!DISPLAY:~0,20!"
 
@@ -69,14 +62,13 @@ echo.
 echo  -----------------------------------------------------------
 echo.
 
-:: Find the fastest one
+:: Find the fastest — use PowerShell for decimal comparison
 set "BEST_MS=99999"
 set "BEST_NAME="
 set "BEST_IP="
 
 for /L %%I in (0,1,7) do (
-    if defined R_MS[%%I] (
-        :: PowerShell comparison since batch can't do decimals
+    if "!R_MS[%%I]!" neq "" if "!R_MS[%%I]!" neq "err" (
         for /f %%C in ('powershell -NoProfile -Command "if ([double]'!R_MS[%%I]!' -lt [double]'!BEST_MS!') { 'yes' } else { 'no' }"') do (
             if "%%C"=="yes" (
                 set "BEST_MS=!R_MS[%%I]!"
@@ -87,11 +79,11 @@ for /L %%I in (0,1,7) do (
     )
 )
 
-echo   Fastest: %BEST_NAME% (%BEST_IP%) at %BEST_MS% ms
+echo   Fastest: !BEST_NAME! (!BEST_IP!) at !BEST_MS! ms
 echo.
 
 :: Offer to apply the fastest DNS
-set /p "APPLY=  Set %BEST_NAME% (%BEST_IP%) as your DNS? (Y/N): "
+set /p "APPLY=  Set !BEST_NAME! (!BEST_IP!) as your DNS? (Y/N): "
 if /i not "!APPLY!"=="Y" (
     echo.
     echo  OK, no changes made.
@@ -123,7 +115,14 @@ if not defined ADAPTER (
     exit /b 1
 )
 
-powershell -NoProfile -Command "Set-DnsClientServerAddress -InterfaceAlias '!ADAPTER!' -ServerAddresses ('!BEST_IP!')"
+powershell -NoProfile -Command "Set-DnsClientServerAddress -InterfaceAlias '!ADAPTER!' -ServerAddresses ('!BEST_IP!'); if (-not $?) { exit 1 }"
+if !errorlevel! neq 0 (
+    echo  [ERROR] Failed to set DNS.
+    echo.
+    pause
+    exit /b 1
+)
+
 echo.
 echo  [OK] DNS on "!ADAPTER!" set to !BEST_IP! (!BEST_NAME!)
 echo.

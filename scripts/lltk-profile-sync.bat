@@ -6,7 +6,7 @@ setlocal EnableDelayedExpansion
 ::
 :: You need:
 ::   - Lenovo Legion Toolkit installed
-::     https://github.com/BartoszCichworthy/LenovoLegionToolkit
+::     https://github.com/BartoszCichowska/LenovoLegionToolkit
 ::   - LenovoToolkitCLI.exe in your system PATH
 
 title LLTK Profile Sync
@@ -23,7 +23,7 @@ if %ERRORLEVEL% neq 0 (
     echo  Can't find LenovoToolkitCLI.exe in PATH.
     echo.
     echo  Install Lenovo Legion Toolkit and add it to PATH first.
-    echo  https://github.com/BartoszCichworthy/LenovoLegionToolkit
+    echo  https://github.com/BartoszCichowska/LenovoLegionToolkit
     echo.
     goto :Done
 )

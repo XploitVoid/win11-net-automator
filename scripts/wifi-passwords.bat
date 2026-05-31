@@ -23,20 +23,21 @@ echo     Saved Wi-Fi Passwords
 echo  ============================================================
 echo.
 
-:: Get all saved profile names
 set "COUNT=0"
 set "FOUND=0"
 
-for /f "tokens=2 delims=:" %%P in ('netsh wlan show profiles ^| findstr /c:"All User Profile"') do (
+:: tokens=1,* with delims=: grabs everything after the first colon
+:: so SSIDs containing ":" won't get truncated
+for /f "tokens=1,* delims=:" %%P in ('netsh wlan show profiles ^| findstr /c:"All User Profile"') do (
     set /a COUNT+=1
 
-    :: Trim leading space
-    set "PROFILE=%%P"
+    :: %%Q has everything after "All User Profile:", trim leading space
+    set "PROFILE=%%Q"
     set "PROFILE=!PROFILE:~1!"
 
-    :: Try to extract the password (Key Content line)
+    :: Extract password — same trick with tokens=1,* to preserve ":" in passwords
     set "KEY="
-    for /f "tokens=2 delims=:" %%K in ('netsh wlan show profile name^="!PROFILE!" key^=clear 2^>nul ^| findstr /c:"Key Content"') do (
+    for /f "tokens=1,* delims=:" %%J in ('netsh wlan show profile name^="!PROFILE!" key^=clear 2^>nul ^| findstr /c:"Key Content"') do (
         set "KEY=%%K"
         set "KEY=!KEY:~1!"
     )

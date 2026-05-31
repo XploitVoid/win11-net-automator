@@ -29,22 +29,21 @@ echo.
 
 :: -----------------------------------------------------------
 :: Figure out which adapter is connected
-:: Check for Wi-Fi first (more common on laptops), then Ethernet
 :: -----------------------------------------------------------
 
 set "IFACE="
 
-for /f "tokens=*" %%A in ('netsh interface show interface ^| findstr /i "Connected"') do (
-    echo %%A | findstr /i "Wi-Fi" >nul && (
-        if not defined IFACE set "IFACE=Wi-Fi"
-    )
-    echo %%A | findstr /i "Ethernet" >nul && (
-        if not defined IFACE set "IFACE=Ethernet"
-    )
+:: Parse the actual interface name from netsh output instead of hardcoding "Wi-Fi" or "Ethernet"
+for /f "tokens=3*" %%A in ('netsh interface show interface ^| findstr /i "Connected"') do (
+    :: %%B contains the rest of the line which is the interface name
+    set "IFACE=%%B"
+    :: Stop at the first connected interface we find
+    goto :FoundInterface
 )
 
+:FoundInterface
 if not defined IFACE (
-    echo  [ERROR] No active Wi-Fi or Ethernet adapter found.
+    echo  [ERROR] No active network adapter found.
     echo  Make sure you're connected to a network first.
     echo.
     pause
