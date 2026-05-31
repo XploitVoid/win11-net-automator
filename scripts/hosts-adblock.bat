@@ -76,8 +76,20 @@ echo   [OK] Download complete.
 
 echo.
 echo  Applying to system...
-:: We append the original Windows localhost entries just in case the downloaded one misses them,
-:: but StevenBlack's already includes standard localhost routing. Overwriting is cleaner.
+
+:: Check if telemetry-block.bat has added entries to the current hosts file
+:: If so, preserve them by appending them to our newly downloaded adblock list
+set "MARKER=# win11-net-automator telemetry block"
+findstr /c:"%MARKER%" "%HOSTS_FILE%" > "%TEMP%\telemetry_preserve.tmp" 2>nul
+if %errorlevel% equ 0 (
+    echo.>> "%TEMP_HOSTS%"
+    echo %MARKER%>> "%TEMP_HOSTS%"
+    type "%TEMP%\telemetry_preserve.tmp" >> "%TEMP_HOSTS%"
+    echo   [OK] Preserved existing telemetry block rules.
+)
+del "%TEMP%\telemetry_preserve.tmp" >nul 2>&1
+
+:: Apply the combined list to the system
 copy /y "%TEMP_HOSTS%" "%HOSTS_FILE%" >nul 2>&1
 
 ipconfig /flushdns >nul 2>&1

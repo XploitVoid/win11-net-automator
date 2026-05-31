@@ -66,9 +66,9 @@ for /f "usebackq tokens=*" %%P in (`powershell -NoProfile -Command ^
 :: 4. Ping Test (Google DNS)
 :: -----------------------------------------------------------
 set "PING_MS="
-for /f "tokens=4 delims==" %%M in ('ping -n 1 -w 2000 8.8.8.8 ^| findstr "time="') do (
+for /f "usebackq tokens=*" %%M in (`powershell -NoProfile -Command ^
+    "$p = Get-WmiObject Win32_PingStatus -Filter \"Address='8.8.8.8'\"; if ($p.StatusCode -eq 0) { Write-Output ($p.ResponseTime.ToString() + 'ms') } else { Write-Output 'Timeout' }"`) do (
     set "PING_MS=%%M"
-    set "PING_MS=!PING_MS: =!"
 )
 if not defined PING_MS set "PING_MS=Timeout"
 
