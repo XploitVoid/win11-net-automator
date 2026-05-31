@@ -52,6 +52,7 @@ echo.
 echo  [1/3] Copying files to %INSTALL_DIR%...
 if not exist "%INSTALL_DIR%" mkdir "%INSTALL_DIR%" >nul 2>&1
 copy /y "%SRC_DIR%\*.bat" "%INSTALL_DIR%\" >nul 2>&1
+copy /y "%SRC_DIR%\*.ps1" "%INSTALL_DIR%\" >nul 2>&1
 echo   - Files copied.
 
 echo.

@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌐 Win11 Net Automator v2.0
+# 🌐 Win11 Net Automator v3.0
 
 **The Ultimate Networking Automation Suite for Windows 11.**
 
@@ -14,7 +14,7 @@
 
 I got tired of manually configuring DNS, flushing network stacks, and clicking through settings every time I set up a new machine or debug connectivity issues. So I wrote these scripts to automate the boring stuff.
 
-**Version 2.0 is here!** The project has evolved from a simple folder of batch scripts into a fully centralized tool with a Desktop Right-Click menu, a master dashboard, and advanced features like Auto-Healing and Gaming Optimization.
+**Version 3.0 is here!** We have entirely replaced the old text-based command-line menu with a gorgeous, native Windows **Graphical User Interface (GUI)**. 
 
 ## 🚀 How to Install & Use
 
@@ -24,21 +24,21 @@ git clone https://github.com/XploitVoid/win11-net-automator.git
 cd win11-net-automator
 ```
 2. Right-click **`install.bat`** and select **Run as administrator**.
-3. **Done!** You can now access all scripts in two ways:
-   - **Desktop Context Menu:** Right-click anywhere on your desktop and select `🌐 Win11 Net Automator` to open the main menu.
-   - **Terminal:** Open Command Prompt or PowerShell anywhere and simply type `menu` to launch the suite.
+3. **Done!** You can now access the beautiful new Dashboard from anywhere:
+   - **Desktop Context Menu:** Right-click anywhere on your desktop and select `🌐 Win11 Net Automator` to open the GUI.
+   - **Terminal:** Open Command Prompt or PowerShell anywhere and simply type `menu` to launch the GUI.
 
-*(You can also just run the scripts individually from the `scripts/` folder if you prefer the portable way).*
+*(When you click a button in the GUI, it will automatically prompt you for Administrator privileges via UAC).*
 
 ## What's in the box
 
-| Script | What it does |
+| Tool | What it does |
 |--------|-------------|
-| `menu.bat` | **[NEW]** The central hub. Lists all available scripts and lets you run them by typing a number. |
-| `gaming-mode.bat` | **[NEW]** Pauses bandwidth-heavy background tasks (Updates, OneDrive) and optimizes TCP/Registry for the absolute lowest gaming ping. |
-| `speed-tuner.bat` | **[NEW]** Tunes your Windows TCP/IP stack (Auto-Tuning, RSS, ECN) to max out high-speed fiber or Wi-Fi 6 connections. |
-| `auto-healer.bat` | **[NEW]** A background monitor that constantly checks your internet connection and automatically resets your adapter if the connection drops. |
-| `hotspot-manager.bat`| **[NEW]** Quickly toggle the built-in Windows 11 Mobile Hotspot on or off directly from the terminal via modern WinRT APIs. |
+| `net-automator-gui.ps1` | **[NEW]** The native Dark Mode GUI dashboard. Features categorized buttons, hover effects, and automatic UAC elevation. |
+| `gaming-mode.bat` | Pauses bandwidth-heavy background tasks (Updates, OneDrive) and optimizes TCP/Registry for the absolute lowest gaming ping. |
+| `speed-tuner.bat` | Tunes your Windows TCP/IP stack (Auto-Tuning, RSS, ECN) to max out high-speed fiber or Wi-Fi 6 connections. |
+| `auto-healer.bat` | A background monitor that constantly checks your internet connection and automatically resets your adapter if the connection drops. |
+| `hotspot-manager.bat`| Quickly toggle the built-in Windows 11 Mobile Hotspot on or off directly from the terminal via modern WinRT APIs. |
 | `net-info.bat` | Clean dashboard showing your active adapter, local IP, public IP, MAC address, DNS servers, and current ping. |
 | `mac-spoof.bat` | Randomizes your network adapter's MAC address to bypass public Wi-Fi limits or tracking. Fully reversible. |
 | `hosts-adblock.bat` | Downloads and applies the StevenBlack hosts file for system-wide ad and malware blocking. Reversible. |
@@ -52,9 +52,14 @@ cd win11-net-automator
 
 ## Changelog
 
+### v3.0.0 (The GUI Update)
+- **New Interface:** Replaced the text-based command prompt menu with a sleek, native PowerShell Graphical User Interface (`net-automator-gui.ps1`).
+- **Modern UX:** Features a dark theme, color-coded categories, and responsive hover effects.
+- **Smart UAC:** The GUI runs cleanly as a standard user and only requests Administrator elevation precisely when a script button is clicked.
+- **Seamless Integration:** `install.bat` and the Desktop right-click menu have been updated to seamlessly launch the new visual dashboard.
+
 ### v2.0.0 (The Masterpiece Update)
 - **New Installer:** Added `install.bat` which securely copies scripts to `C:\ProgramData`, sets up system PATH variables, and injects a permanent `Win11 Net Automator` option into the Desktop right-click context menu.
-- **New Hub:** Added `menu.bat` to act as a centralized, interactive dashboard for all scripts.
 - **New Script:** `gaming-mode.bat` — optimize Windows registry and services for low-latency gaming.
 - **New Script:** `speed-tuner.bat` — tweak TCP Window Auto-Tuning, RSS, and ECN for gigabit fiber.
 - **New Script:** `auto-healer.bat` — background daemon that detects internet drops and resets the adapter automatically.
