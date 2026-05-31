@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🌐 Win11 Net Automator
+# 🌐 Win11 Net Automator v2.0
 
-**Batch scripts to fix your Windows 11 networking headaches.**
+**The Ultimate Networking Automation Suite for Windows 11.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![OS: Windows 11](https://img.shields.io/badge/OS-Windows%2011-0078D4?logo=windows11&logoColor=white)](https://www.microsoft.com/windows/windows-11)
@@ -14,12 +14,31 @@
 
 I got tired of manually configuring DNS, flushing network stacks, and clicking through settings every time I set up a new machine or debug connectivity issues. So I wrote these scripts to automate the boring stuff.
 
-This repo is a collection of `.bat` scripts (with PowerShell under the hood where needed) that handle DNS configuration, privacy hardening, network diagnostics, and system optimization.
+**Version 2.0 is here!** The project has evolved from a simple folder of batch scripts into a fully centralized tool with a Desktop Right-Click menu, a master dashboard, and advanced features like Auto-Healing and Gaming Optimization.
+
+## 🚀 How to Install & Use
+
+1. Clone or download this repository:
+```bash
+git clone https://github.com/XploitVoid/win11-net-automator.git
+cd win11-net-automator
+```
+2. Right-click **`install.bat`** and select **Run as administrator**.
+3. **Done!** You can now access all scripts in two ways:
+   - **Desktop Context Menu:** Right-click anywhere on your desktop and select `🌐 Win11 Net Automator` to open the main menu.
+   - **Terminal:** Open Command Prompt or PowerShell anywhere and simply type `menu` to launch the suite.
+
+*(You can also just run the scripts individually from the `scripts/` folder if you prefer the portable way).*
 
 ## What's in the box
 
 | Script | What it does |
 |--------|-------------|
+| `menu.bat` | **[NEW]** The central hub. Lists all available scripts and lets you run them by typing a number. |
+| `gaming-mode.bat` | **[NEW]** Pauses bandwidth-heavy background tasks (Updates, OneDrive) and optimizes TCP/Registry for the absolute lowest gaming ping. |
+| `speed-tuner.bat` | **[NEW]** Tunes your Windows TCP/IP stack (Auto-Tuning, RSS, ECN) to max out high-speed fiber or Wi-Fi 6 connections. |
+| `auto-healer.bat` | **[NEW]** A background monitor that constantly checks your internet connection and automatically resets your adapter if the connection drops. |
+| `hotspot-manager.bat`| **[NEW]** Quickly toggle the built-in Windows 11 Mobile Hotspot on or off directly from the terminal via modern WinRT APIs. |
 | `net-info.bat` | Clean dashboard showing your active adapter, local IP, public IP, MAC address, DNS servers, and current ping. |
 | `mac-spoof.bat` | Randomizes your network adapter's MAC address to bypass public Wi-Fi limits or tracking. Fully reversible. |
 | `hosts-adblock.bat` | Downloads and applies the StevenBlack hosts file for system-wide ad and malware blocking. Reversible. |
@@ -31,84 +50,15 @@ This repo is a collection of `.bat` scripts (with PowerShell under the hood wher
 | `wifi-passwords.bat` | Lists all saved Wi-Fi profiles and their passwords in one shot. |
 | `lltk-profile-sync.bat` | Quick switcher for Lenovo Legion Toolkit power profiles (Quiet/Balance/Performance). |
 
-## Before you start
-
-- **Windows 11** — these scripts use Win11-specific features (especially the DoH stuff)
-- **Run as Admin** — most scripts need elevation and will tell you if you forget
-- **Lenovo Legion Toolkit** — only needed for `lltk-profile-sync.bat`. Make sure `LenovoToolkitCLI.exe` is in your PATH
-
-## How to use
-
-```bash
-git clone https://github.com/XploitVoid/win11-net-automator.git
-cd win11-net-automator
-```
-
-Then right-click any script in `scripts/` → **Run as administrator**. Or from an elevated terminal:
-
-```batch
-scripts\enable-doh.bat
-scripts\dns-benchmark.bat
-scripts\telemetry-block.bat
-scripts\wifi-passwords.bat
-scripts\network-flush.bat
-```
-
-Each script has interactive prompts and will walk you through what it's doing.
-
-## Scripts in detail
-
-### `net-info.bat`
-
-A clean, single-page dashboard for your network connection. It pulls your active adapter name, link speed, and MAC address. It also queries your local IP, fetches your public IP via `ifconfig.me`, lists your active DNS servers, and runs a quick ping test to Google DNS. Perfect for when you need to know exactly what's going on with your connection right now.
-
-### `mac-spoof.bat`
-
-Need to bypass a 30-minute public Wi-Fi limit? Or just want to prevent MAC tracking? This script generates a valid, randomized locally-administered MAC address and applies it to your active adapter via the registry. It briefly disables and re-enables the adapter so the change takes effect immediately. You can restore your original hardware MAC address with a single click.
-
-### `hosts-adblock.bat`
-
-Block ads, malware, and trackers system-wide without needing browser extensions. This script downloads the legendary [StevenBlack hosts list](https://github.com/StevenBlack/hosts) (over 100,000 blocked domains) and applies it to your Windows `hosts` file. It automatically backs up your original file before making changes, and you can disable the adblocker to restore the backup at any time.
-
-### `enable-doh.bat`
-
-Enables encrypted DNS on your active network adapter. It:
-- Registers Cloudflare (`1.1.1.1`, `1.0.0.1`) and Google (`8.8.8.8`, `8.8.4.4`) as DoH servers
-- Detects whichever adapter you're actually using
-- Sets all four as your DNS servers (Cloudflare primary, Google fallback)
-- Writes the `DohFlags` registry entries so Windows enforces encrypted-only mode
-- Falls back to `netsh` if the PowerShell cmdlet doesn't cooperate
-
-### `dns-benchmark.bat`
-
-Not sure which DNS server is fastest for your location? This script benchmarks 8 servers (Cloudflare, Google, Quad9, OpenDNS, AdGuard, CleanBrowsing) by actually resolving real domains — not just pinging. It averages 3 queries per server, ranks them, and lets you apply the fastest one with a single keystroke.
-
-### `telemetry-block.bat`
-
-Three modes:
-- **Block** — adds outbound firewall rules for 18 known telemetry endpoints, writes them to the hosts file, disables DiagTrack and dmwappushservice, sets `AllowTelemetry` to 0 in registry
-- **Unblock** — reverses everything cleanly
-- **Status** — shows which endpoints are currently blocked and service states
-
-Everything is tagged with a `Win11NetAutomator-Telemetry` prefix so it won't interfere with other firewall rules.
-
-### `wifi-passwords.bat`
-
-Pulls every saved Wi-Fi profile from `netsh wlan` and extracts the stored password for each one. Handy when you need to share a Wi-Fi password but can't remember it, or when you're migrating to a new machine. Works without admin but some profiles might hide keys without elevation.
-
-### `adguard-routing.bat`
-
-If you're running AdGuard Home on your LAN, this script points your machine's DNS at it. It auto-detects whether you're on Wi-Fi or Ethernet, asks for the AdGuard IP, validates the input, and applies it. DNS cache gets flushed automatically after.
-
-### `network-flush.bat`
-
-Runs the classic network reset sequence (`flushdns` → `release` → `renew` → `winsock reset` → `ip reset`) with proper error tracking. Offers to reboot when it's done since Winsock/TCP resets need a restart to fully apply.
-
-### `lltk-profile-sync.bat`
-
-Simple menu to switch power profiles through the Lenovo Legion Toolkit CLI. Pick 1/2/3 and it calls `LenovoToolkitCLI.exe` with the right arguments. Not much more to it.
-
 ## Changelog
+
+### v2.0.0 (The Masterpiece Update)
+- **New Installer:** Added `install.bat` which securely copies scripts to `C:\ProgramData`, sets up system PATH variables, and injects a permanent `Win11 Net Automator` option into the Desktop right-click context menu.
+- **New Hub:** Added `menu.bat` to act as a centralized, interactive dashboard for all scripts.
+- **New Script:** `gaming-mode.bat` — optimize Windows registry and services for low-latency gaming.
+- **New Script:** `speed-tuner.bat` — tweak TCP Window Auto-Tuning, RSS, and ECN for gigabit fiber.
+- **New Script:** `auto-healer.bat` — background daemon that detects internet drops and resets the adapter automatically.
+- **New Script:** `hotspot-manager.bat` — toggle Windows Mobile Hotspot instantly using WinRT PowerShell APIs.
 
 ### v1.2.1
 - **Fix (net-info):** Resolved an issue where Ping parsing failed on non-English (e.g., Thai) Windows versions by switching to a locale-independent WMI query.
