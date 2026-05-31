@@ -1,0 +1,19 @@
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS
+*.tmp
+*.bak
+
+# The instruction file — not part of the project
+Markdown.md
