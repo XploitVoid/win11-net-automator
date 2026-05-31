@@ -20,7 +20,10 @@ This repo is a collection of `.bat` scripts (with PowerShell under the hood wher
 
 | Script | What it does |
 |--------|-------------|
-| `enable-doh.bat` | Sets up DNS over HTTPS with Cloudflare + Google DNS. Registers DoH templates, configures the adapter, writes registry flags — the whole nine yards. |
+| `net-info.bat` | Clean dashboard showing your active adapter, local IP, public IP, MAC address, DNS servers, and current ping. |
+| `mac-spoof.bat` | Randomizes your network adapter's MAC address to bypass public Wi-Fi limits or tracking. Fully reversible. |
+| `hosts-adblock.bat` | Downloads and applies the StevenBlack hosts file for system-wide ad and malware blocking. Reversible. |
+| `enable-doh.bat` | Sets up DNS over HTTPS with Cloudflare + Google DNS. Registers DoH templates, configures the adapter, writes registry flags. |
 | `adguard-routing.bat` | Points your DNS to a local AdGuard Home instance. Detects your active adapter automatically. |
 | `dns-benchmark.bat` | Tests 8 popular DNS servers for response time, shows you the fastest, and offers to apply it. |
 | `network-flush.bat` | Nuclear option — flushes DNS, releases/renews IP, resets Winsock and TCP/IP stack. For when nothing else works. |
@@ -54,6 +57,18 @@ scripts\network-flush.bat
 Each script has interactive prompts and will walk you through what it's doing.
 
 ## Scripts in detail
+
+### `net-info.bat`
+
+A clean, single-page dashboard for your network connection. It pulls your active adapter name, link speed, and MAC address. It also queries your local IP, fetches your public IP via `ifconfig.me`, lists your active DNS servers, and runs a quick ping test to Google DNS. Perfect for when you need to know exactly what's going on with your connection right now.
+
+### `mac-spoof.bat`
+
+Need to bypass a 30-minute public Wi-Fi limit? Or just want to prevent MAC tracking? This script generates a valid, randomized locally-administered MAC address and applies it to your active adapter via the registry. It briefly disables and re-enables the adapter so the change takes effect immediately. You can restore your original hardware MAC address with a single click.
+
+### `hosts-adblock.bat`
+
+Block ads, malware, and trackers system-wide without needing browser extensions. This script downloads the legendary [StevenBlack hosts list](https://github.com/StevenBlack/hosts) (over 100,000 blocked domains) and applies it to your Windows `hosts` file. It automatically backs up your original file before making changes, and you can disable the adblocker to restore the backup at any time.
 
 ### `enable-doh.bat`
 
@@ -94,6 +109,11 @@ Runs the classic network reset sequence (`flushdns` → `release` → `renew` �
 Simple menu to switch power profiles through the Lenovo Legion Toolkit CLI. Pick 1/2/3 and it calls `LenovoToolkitCLI.exe` with the right arguments. Not much more to it.
 
 ## Changelog
+
+### v1.2.0
+- **New:** `net-info.bat` — a clean dashboard for all your network stats (IPs, MAC, DNS, Ping).
+- **New:** `mac-spoof.bat` — randomize your MAC address to bypass tracking/limits.
+- **New:** `hosts-adblock.bat` — apply StevenBlack's hosts file for system-wide adblocking.
 
 ### v1.1.1
 - **Fix:** Fixed 11 bugs across all scripts, including telemetry blocker logic, DNS benchmark variables, Wi-Fi password extraction for SSIDs with colons, and minor UX improvements.
