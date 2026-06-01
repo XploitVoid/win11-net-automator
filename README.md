@@ -16,7 +16,19 @@ I got tired of manually configuring DNS, flushing network stacks, and clicking t
 
 **Version 3.1 is here!** We have upgraded the tool into a fully interactive **Terminal User Interface (TUI)** with ASCII art and arrow-key navigation!
 
-## 🚀 How to Install & Use
+## ⚡ Quick Start (One-Liner)
+
+Open **PowerShell as Administrator** and paste:
+
+```powershell
+irm https://raw.githubusercontent.com/XploitVoid/win11-net-automator/main/launch.ps1 | iex
+```
+
+That's it! The script will download the latest version and give you options to **install** or **run directly**.
+
+---
+
+## 🚀 How to Install & Use (Manual)
 
 1. Clone or download this repository:
 ```bash
